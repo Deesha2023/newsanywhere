@@ -1,301 +1,623 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NewsAnywhere</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #0a0a0a;
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-
-        /* Light theme */
-        body.light {
-            background: #f5f5f5;
-            color: #1a1a1a;
-        }
-
-        body.light .news-card {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-        }
-
-        body.light .filters input {
-            background: #ffffff;
-            color: #1a1a1a;
-            border: 1px solid #ccc;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #00ff88, #00b8ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 30px;
-        }
-
-        .filters {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        input, button {
-            padding: 14px 20px;
-            font-size: 16px;
-            border-radius: 12px;
-            border: none;
-            outline: none;
-        }
-
-        input {
-            background: #1a1a1a;
-            color: white;
-            border: 1px solid #333;
-            flex: 1;
-            min-width: 150px;
-        }
-
-        button {
-            background: linear-gradient(135deg, #00ff88, #00b8ff);
-            color: #0a0a0a;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: scale(1.02);
-        }
-
-        .news-card {
-            background: #1a1a1a;
-            padding: 24px;
-            margin-bottom: 20px;
-            border-radius: 16px;
-            transition: transform 0.2s;
-        }
-
-        .news-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .news-card h3 {
-            margin: 0 0 12px 0;
-            font-size: 1.3rem;
-        }
-
-        .news-card h3 a {
-            color: #00ff88;
-            text-decoration: none;
-        }
-
-        .news-card p {
-            color: #aaa;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .source {
-            color: #666;
-            font-size: 13px;
-        }
-
-        .read-link {
-            display: inline-block;
-            margin-top: 12px;
-            color: #00b8ff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #1a1a1a;
-            color: white;
-            border: 1px solid #333;
-            padding: 10px 15px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 14px;
-            z-index: 100;
-        }
-
-        body.light .dark-mode-toggle {
-            background: #ffffff;
-            color: #1a1a1a;
-            border: 1px solid #ccc;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-        }
-
-        .error {
-            text-align: center;
-            padding: 40px;
-            color: #ff4444;
-        }
-
-        .live-badge {
-            display: inline-block;
-            background: #ff4444;
-            color: white;
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-left: 10px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-
-        .results-count {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #888;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            .filters {
-                flex-direction: column;
-            }
-            input, button {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News Anywhere</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f0e8;
+      --accent: #c8102e;
+      --muted: #8a8070;
+      --card: #fffdf8;
+      --border: #d4cfc4;
+      --shadow: rgba(0,0,0,0.06);
+      --toggle-bg: #d4cfc4;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+ 
+    [data-theme="dark"] {
+      --ink: #f0ebe0;
+      --paper: #141414;
+      --accent: #e8304a;
+      --muted: #7a7060;
+      --card: #1e1e1e;
+      --border: #2e2e2e;
+      --shadow: rgba(0,0,0,0.3);
+      --toggle-bg: #3a3a3a;
+    }
+ 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+ 
+    header {
+      border-bottom: 3px double var(--ink);
+      padding: 0 2rem;
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background var(--transition), border-color var(--transition);
+    }
+ 
+    .masthead {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 1.2rem 0 0.6rem;
+      border-bottom: 1px solid var(--border);
+      transition: border-color var(--transition);
+    }
+ 
+    .masthead h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      text-align: center;
+    }
+ 
+    .masthead h1 span { color: var(--accent); }
+ 
+    .dateline {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.25rem;
+    }
+ 
+    .theme-toggle {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      width: 52px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--toggle-bg);
+      transition: background var(--transition), border-color var(--transition);
+      display: flex;
+      align-items: center;
+      padding: 3px;
+    }
+ 
+    .theme-toggle::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--paper);
+      transition: transform var(--transition), background var(--transition);
+      display: block;
+    }
+ 
+    [data-theme="dark"] .theme-toggle::after { transform: translateX(24px); }
+ 
+    .theme-icon {
+      position: absolute;
+      font-size: 0.65rem;
+      pointer-events: none;
+    }
+    .icon-sun { left: 6px; }
+    .icon-moon { right: 5px; }
+ 
+    .search-bar {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.8rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+ 
+    .input-wrap { position: relative; }
+ 
+    .input-wrap .clear-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 2px;
+      display: none;
+    }
+    .input-wrap .clear-btn:hover { color: var(--accent); }
+    .input-wrap input:not(:placeholder-shown) + .clear-btn { display: block; }
+ 
+    .search-bar input {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.8rem 0.5rem 0.9rem;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--ink);
+      outline: none;
+      width: 160px;
+      transition: border-color 0.2s, background var(--transition), color var(--transition);
+    }
+ 
+    .search-bar input:focus { border-color: var(--accent); }
+    .search-bar input::placeholder { color: var(--muted); font-style: italic; }
+ 
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-style: italic;
+    }
+ 
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+ 
+    .live-dot.active {
+      opacity: 1;
+      animation: pulse 1s infinite;
+    }
+ 
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+ 
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+ 
+    #status {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      min-height: 1.4em;
+    }
+ 
+    .spinner {
+      display: inline-block;
+      width: 13px; height: 13px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+ 
+    #results {
+      columns: 3 280px;
+      column-gap: 1.4rem;
+    }
+ 
+    .skeleton-card {
+      break-inside: avoid;
+      margin-bottom: 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--border);
+      padding: 1.2rem;
+    }
+ 
+    .skeleton-line {
+      height: 12px;
+      background: linear-gradient(90deg, var(--border) 25%, var(--paper) 50%, var(--border) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 2px;
+      margin-bottom: 8px;
+    }
+ 
+    .skeleton-line.tall { height: 140px; margin-bottom: 12px; }
+    .skeleton-line.short { width: 55%; }
+    .skeleton-line.medium { width: 80%; }
+ 
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+ 
+    .article-card {
+      break-inside: avoid;
+      margin-bottom: 1.4rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--ink);
+      padding: 1.2rem;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.4s forwards;
+      transition: box-shadow 0.2s, background var(--transition), border-color var(--transition);
+    }
+ 
+    .article-card:hover {
+      box-shadow: 4px 4px 0 var(--ink);
+      transform: translateY(0) !important;
+    }
+ 
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+ 
+    .card-source {
+      font-size: 0.63rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+ 
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+      transition: color var(--transition);
+    }
+ 
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 0.8rem;
+    }
+ 
+    .card-img {
+      width: 100%;
+      height: 155px;
+      object-fit: cover;
+      margin-bottom: 0.8rem;
+      border: 1px solid var(--border);
+    }
+ 
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 0.7rem;
+      transition: border-color var(--transition);
+    }
+ 
+    .card-date { font-size: 0.68rem; color: var(--muted); }
+ 
+    .card-link {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .card-link:hover { color: var(--accent); border-color: var(--accent); }
+ 
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+    }
+    .empty-state .big { font-size: 4rem; opacity: 0.2; margin-bottom: 0.5rem; }
+    .empty-state p { font-size: 0.88rem; }
+ 
+    .error-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+ 
+    #load-more-trigger {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+ 
+    .load-spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+ 
+    .end-marker {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .end-marker::before, .end-marker::after { content: '— '; }
+ 
+    .article-card:nth-child(1)  { animation-delay: 0.04s; }
+    .article-card:nth-child(2)  { animation-delay: 0.08s; }
+    .article-card:nth-child(3)  { animation-delay: 0.12s; }
+    .article-card:nth-child(4)  { animation-delay: 0.16s; }
+    .article-card:nth-child(5)  { animation-delay: 0.20s; }
+    .article-card:nth-child(6)  { animation-delay: 0.24s; }
+    .article-card:nth-child(7)  { animation-delay: 0.28s; }
+    .article-card:nth-child(8)  { animation-delay: 0.32s; }
+    .article-card:nth-child(9)  { animation-delay: 0.36s; }
+    .article-card:nth-child(10) { animation-delay: 0.40s; }
+ 
+    @media (max-width: 600px) {
+      .search-bar input { width: 100%; }
+      .live-indicator { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-    
-    <h1>📰 NewsAnywhere</h1>
-    <p class="subtitle">Get live news by location, topic, and keywords</p>
-    
-    <div class="filters">
-        <input type="text" id="location" placeholder="📍 Location (e.g., India)" value="India">
-        <input type="text" id="topic" placeholder="🎵 Topic (e.g., education)" value="education">
-        <input type="text" id="keywords" placeholder="🔑 Keywords (e.g., cbse)" value="cbse">
-        <button onclick="searchNews()">Search → <span id="liveBadge" class="live-badge" style="display: none;">LIVE</span></button>
+ 
+<header>
+  <div class="masthead">
+    <div>
+      <h1>News<span>Anywhere</span></h1>
+      <div class="dateline" id="dateline"></div>
     </div>
-    
-    <div id="results">
-        <div class="loading">✨ Enter your search terms above ✨</div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="theme-icon icon-sun">☀️</span>
+      <span class="theme-icon icon-moon">🌙</span>
+    </button>
+  </div>
+  <div class="search-bar">
+    <div class="input-wrap">
+      <input type="text" id="location" placeholder="Location" oninput="onInputChange()" />
+      <button class="clear-btn" onclick="clearInput('location')">✕</button>
     </div>
-
-    <script>
-        // ✅ FIXED: Using relative URL - works on localhost AND Render
-        const API_URL = '/api/news';
-
-        async function searchNews() {
-            const location = document.getElementById('location').value;
-            const topic = document.getElementById('topic').value;
-            const keywords = document.getElementById('keywords').value;
-            
-            const resultsDiv = document.getElementById('results');
-            const liveBadge = document.getElementById('liveBadge');
-            
-            // Show loading state
-            resultsDiv.innerHTML = '<div class="loading">📡 Fetching live news... ⏳</div>';
-            liveBadge.style.display = 'inline-block';
-            
-            try {
-                // Build query string
-                let query = '';
-                if (location) query += location + ' ';
-                if (topic) query += topic + ' ';
-                if (keywords) query += keywords;
-                query = query.trim();
-                
-                // ✅ Using relative URL - THIS IS THE FIX
-                const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.articles && data.articles.length > 0) {
-                    resultsDiv.innerHTML = `
-                        <div class="results-count">📰 ${data.articles.length} stories for "${query}"</div>
-                        ${data.articles.map(article => `
-                            <div class="news-card">
-                                <h3>
-                                    <a href="${article.url}" target="_blank">${article.title || 'No title'}</a>
-                                </h3>
-                                <p>${article.description || 'Click READ to view full article...'}</p>
-                                <span class="source">
-                                    📰 ${article.source?.name || 'Unknown Source'} | 
-                                    📅 ${article.publishedAt ? new Date(article.publishedAt).toLocaleDateString() : 'Date unknown'}
-                                </span>
-                                <br>
-                                <a href="${article.url}" target="_blank" class="read-link">READ →</a>
-                            </div>
-                        `).join('')}
-                    `;
-                } else {
-                    resultsDiv.innerHTML = '<div class="error">😔 No news found. Try different keywords!</div>';
-                }
-            } catch (error) {
-                console.error('Search error:', error);
-                resultsDiv.innerHTML = `<div class="error">❌ Could not connect to server. Please try again later.<br><br>💡 Tip: Make sure your search terms are valid.</div>`;
-                liveBadge.style.display = 'none';
-            } finally {
-                setTimeout(() => {
-                    liveBadge.style.display = 'none';
-                }, 3000);
-            }
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('light');
-            const btn = document.querySelector('.dark-mode-toggle');
-            if (document.body.classList.contains('light')) {
-                btn.innerHTML = '☀️ Light Mode';
-            } else {
-                btn.innerHTML = '🌙 Dark Mode';
-            }
-        }
-        
-        // Load default search on page load
-        searchNews();
-    </script>
+    <div class="input-wrap">
+      <input type="text" id="genre" placeholder="Genre" oninput="onInputChange()" />
+      <button class="clear-btn" onclick="clearInput('genre')">✕</button>
+    </div>
+    <div class="input-wrap">
+      <input type="text" id="keyword" placeholder="Keyword" oninput="onInputChange()" />
+      <button class="clear-btn" onclick="clearInput('keyword')">✕</button>
+    </div>
+    <div class="live-indicator">
+      <div class="live-dot" id="liveDot"></div>
+      <span>Live</span>
+    </div>
+  </div>
+</header>
+ 
+<main>
+  <div id="status"></div>
+  <div id="results">
+    <div class="empty-state">
+      <div class="big">📰</div>
+      <p>Start typing to fetch live news instantly.</p>
+    </div>
+  </div>
+  <div id="load-more-trigger"></div>
+</main>
+ 
+<script>
+  // INIT
+  document.getElementById('dateline').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }).toUpperCase();
+ 
+  // THEME
+  const savedTheme = localStorage.getItem('na-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+ 
+  function toggleTheme() {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('na-theme', next);
+  }
+ 
+  // STATE
+  let debounceTimer = null;
+  let currentPage = 1;
+  let currentQuery = '';
+  let isFetching = false;
+  let hasMore = true;
+  let totalLoaded = 0;
+  const PAGE_SIZE = 10;
+ 
+  // LIVE SEARCH — debounced 500ms
+  function onInputChange() {
+    clearTimeout(debounceTimer);
+    const dot = document.getElementById('liveDot');
+    dot.classList.add('active');
+ 
+    debounceTimer = setTimeout(() => {
+      dot.classList.remove('active');
+ 
+      const location = document.getElementById('location').value.trim();
+      const genre    = document.getElementById('genre').value.trim();
+      const keyword  = document.getElementById('keyword').value.trim();
+      const query    = [location, genre, keyword].filter(Boolean).join(' ');
+ 
+      if (!query) {
+        document.getElementById('results').innerHTML = `
+          <div class="empty-state">
+            <div class="big">📰</div>
+            <p>Start typing to fetch live news instantly.</p>
+          </div>`;
+        document.getElementById('load-more-trigger').innerHTML = '';
+        setStatus('');
+        return;
+      }
+ 
+      currentPage = 1;
+      hasMore = true;
+      totalLoaded = 0;
+      currentQuery = query;
+      document.getElementById('results').innerHTML = '';
+      fetchNews(true);
+    }, 500);
+  }
+ 
+  function clearInput(id) {
+    document.getElementById(id).value = '';
+    onInputChange();
+  }
+ 
+  // FETCH
+  async function fetchNews(reset = false) {
+    if (isFetching || !hasMore) return;
+    isFetching = true;
+ 
+    const location = document.getElementById('location').value.trim();
+    const genre    = document.getElementById('genre').value.trim();
+    const keyword  = document.getElementById('keyword').value.trim();
+ 
+    const params = new URLSearchParams();
+    if (location) params.append('location', location);
+    if (genre)    params.append('genre', genre);
+    if (keyword)  params.append('keyword', keyword);
+    params.append('page', currentPage);
+    params.append('pageSize', PAGE_SIZE);
+ 
+    if (reset) {
+      showSkeletons();
+      setStatus('');
+    } else {
+      document.getElementById('load-more-trigger').innerHTML =
+        `<span class="load-spinner"></span> Loading more stories…`;
+    }
+ 
+    try {
+      // ✅ ONLY THIS LINE WAS CHANGED (removed http://127.0.0.1:8080)
+      const res  = await fetch(`/news?${params}`);
+      const data = await res.json();
+ 
+      if (!data.success) {
+        if (reset) document.getElementById('results').innerHTML =
+          `<div class="error-box">⚠️ ${data.error}</div>`;
+        document.getElementById('load-more-trigger').innerHTML = '';
+        isFetching = false;
+        return;
+      }
+ 
+      const articles = data.articles.filter(a => a.title && a.title !== '[Removed]');
+      totalLoaded += articles.length;
+ 
+      if (reset) document.getElementById('results').innerHTML = '';
+ 
+      if (articles.length === 0 && reset) {
+        document.getElementById('results').innerHTML =
+          `<div class="empty-state"><div class="big">🔍</div><p>No results. Try different terms.</p></div>`;
+        document.getElementById('load-more-trigger').innerHTML = '';
+        isFetching = false;
+        return;
+      }
+ 
+      appendCards(articles);
+      setStatus(`${totalLoaded} stories for "<strong>${currentQuery}</strong>"`);
+ 
+      if (articles.length < PAGE_SIZE || totalLoaded >= 100) {
+        hasMore = false;
+        document.getElementById('load-more-trigger').innerHTML =
+          `<div class="end-marker">End of results</div>`;
+      } else {
+        currentPage++;
+        document.getElementById('load-more-trigger').innerHTML = '';
+      }
+ 
+    } catch (err) {
+      if (reset) document.getElementById('results').innerHTML =
+        `<div class="error-box">⚠️ Could not connect to server. Please refresh and try again.</div>`;
+      document.getElementById('load-more-trigger').innerHTML = '';
+    }
+ 
+    isFetching = false;
+  }
+ 
+  // SKELETON
+  function showSkeletons() {
+    document.getElementById('results').innerHTML = Array.from({length: 6}, () => `
+      <div class="skeleton-card">
+        <div class="skeleton-line tall"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line medium"></div>
+        <div class="skeleton-line medium"></div>
+        <div class="skeleton-line short"></div>
+      </div>`).join('');
+  }
+ 
+  // RENDER
+  function appendCards(articles) {
+    const el = document.getElementById('results');
+    articles.forEach(a => {
+      const div = document.createElement('div');
+      div.innerHTML = renderCard(a);
+      el.appendChild(div.firstElementChild);
+    });
+  }
+ 
+  function renderCard(a) {
+    const date   = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
+    const img    = a.urlToImage ? `<img class="card-img" src="${a.urlToImage}" alt="" loading="lazy" onerror="this.style.display='none'"/>` : '';
+    const source = a.source?.name || 'Unknown';
+    const desc   = a.description ? `<p class="card-desc">${a.description.slice(0,130)}…</p>` : '';
+    return `
+      <div class="article-card">
+        ${img}
+        <div class="card-source">${source}</div>
+        <div class="card-title">${a.title}</div>
+        ${desc}
+        <div class="card-footer">
+          <span class="card-date">${date}</span>
+          <a class="card-link" href="${a.url}" target="_blank" rel="noopener">Read →</a>
+        </div>
+      </div>`;
+  }
+ 
+  // INFINITE SCROLL
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !isFetching && hasMore && currentQuery) {
+      fetchNews(false);
+    }
+  }, { rootMargin: '400px' });
+ 
+  observer.observe(document.getElementById('load-more-trigger'));
+ 
+  function setStatus(msg) {
+    document.getElementById('status').innerHTML = msg;
+  }
+</script>
 </body>
 </html>
