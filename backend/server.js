@@ -35,9 +35,8 @@ app.get('/api/news', async (req, res) => {
     }
 });
 
-// For any other route, serve index.html
-// ✅ FIXED: Changed from '*' to '/*'
-app.get('/*', (req, res) => {
+// ✅ FIXED: Using app.use instead of app.get for catch-all
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
 
