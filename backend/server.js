@@ -9,21 +9,19 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the current directory (where HTML/CSS/JS files are)
-app.use(express.static(__dirname));
+// Serve static files from frontend folder
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Your API endpoint for news
 app.get('/api/news', async (req, res) => {
     try {
         const { location, topic, keywords } = req.query;
         
-        // Build your search query
         let query = '';
         if (location) query += location + ' ';
         if (topic) query += topic + ' ';
         if (keywords) query += keywords;
         
-        // Call your news API (example using NewsAPI or similar)
         const apiKey = process.env.API_KEY;
         const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&apiKey=${apiKey}`;
         
@@ -37,13 +35,11 @@ app.get('/api/news', async (req, res) => {
     }
 });
 
-// For any other route, serve your main HTML file
-// Change 'index.html' to whatever your main HTML file is named
+// For any other route, serve index.html
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
 
-// Start server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
