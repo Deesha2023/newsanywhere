@@ -454,7 +454,7 @@
  
 <main>
   <div class="about-section">
-    <p>🔍 <strong>NewsAnywhere</strong> — Search latest news by <strong>📍 location</strong>, <strong>🎵 genre/topic</strong>, and <strong>🔑 keywords</strong>. Real-time updates from global sources. Infinite scroll. Dark/Light mode. Built for explorers.</p>
+    <p><strong>NewsAnywhere</strong> — Search latest news by location, genre/topic, and keywords. Real-time updates from global sources. Built for explorers by an explorer herself.</p>
   </div>
   <div id="status"></div>
   <div id="results">
@@ -538,7 +538,7 @@
     onInputChange();
   }
  
-  // FETCH
+  // FETCH - GETS REAL, FRESH NEWS FROM NEWSAPI
   async function fetchNews(reset = false) {
     if (isFetching || !hasMore) return;
     isFetching = true;
@@ -596,7 +596,7 @@
       }
  
       appendCards(articles);
-      setStatus(`${totalLoaded} stories for "<strong>${currentQuery}</strong>"`);
+      setStatus(`${totalLoaded} stories for "${currentQuery}"`);
  
       if (articles.length < PAGE_SIZE || totalLoaded >= 100) {
         hasMore = false;
@@ -611,9 +611,7 @@
       console.error('Fetch error:', err);
       if (reset) document.getElementById('results').innerHTML = `
         <div class="error-box">
-          ⚠️ Could not connect to server. Please refresh and try again.
-          <br><br>
-          <small>Error: ${err.message}</small>
+          Unable to connect to news server. Please refresh and try again.
         </div>`;
       document.getElementById('load-more-trigger').innerHTML = '';
     }

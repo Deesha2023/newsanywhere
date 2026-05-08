@@ -12,30 +12,52 @@ app.use(express.json());
 // Serve static files from frontend folder
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// Your API endpoint for news
+// API endpoint for news - FETCHES REAL, FRESH NEWS EVERY TIME
 app.get('/api/news', async (req, res) => {
     try {
-        const { location, topic, keywords } = req.query;
+        const { location, genre, keyword, page = 1, pageSize = 10 } = req.query;
         
-        let query = '';
-        if (location) query += location + ' ';
-        if (topic) query += topic + ' ';
-        if (keywords) query += keywords;
+        // Build search query from all fields
+        const searchTerms = [];
+        if (location && location.trim()) searchTerms.push(location.trim());
+        if (genre && genre.trim()) searchTerms.push(genre.trim());
+        if (keyword && keyword.trim()) searchTerms.push(keyword.trim());
+        
+        const query = searchTerms.join(' ');
+        
+        if (!query) {
+            return res.json({ articles: [], totalResults: 0 });
+        }
+        
+        console.log(`[NewsAPI] Searching for: "${query}"`); // Logs to Render console
         
         const apiKey = process.env.API_KEY;
-        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&apiKey=${apiKey}`;
+        
+        // IMPORTANT: sortBy=publishedAt ensures LATEST news first
+        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&pageSize=${pageSize}&page=${page}&apiKey=${apiKey}&language=en`;
         
         const response = await fetch(url);
         const data = await response.json();
         
-        res.json(data);
+        if (data.status === 'error') {
+            console.error('[NewsAPI] Error:', data.message);
+            return res.json({ articles: [], totalResults: 0, error: data.message });
+        }
+        
+        // Return fresh, relevant articles
+        res.json({
+            articles: data.articles || [],
+            totalResults: data.totalResults || 0,
+            status: 'ok'
+        });
+        
     } catch (error) {
-        console.error('API Error:', error);
-        res.status(500).json({ error: 'Failed to fetch news' });
+        console.error('[Server] Error:', error);
+        res.status(500).json({ articles: [], totalResults: 0, error: 'Failed to fetch news' });
     }
 });
 
-// ✅ FIXED: Using app.use instead of app.get for catch-all
+// Catch-all route for frontend
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
