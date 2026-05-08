@@ -520,8 +520,8 @@
     }
  
     try {
-      // ✅ ONLY THIS LINE WAS CHANGED (removed http://127.0.0.1:8080)
-      const res  = await fetch(`/news?${params}`);
+      // ✅ FIXED: Changed from '/news' to '/api/news' to match backend
+      const res  = await fetch(`/api/news?${params}`);
       const data = await res.json();
  
       if (!data.success) {
