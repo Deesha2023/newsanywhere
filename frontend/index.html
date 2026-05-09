@@ -199,9 +199,148 @@
     }
  
     main {
-      max-width: 1100px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
+    }
+ 
+    /* Sidebar Layout */
+    .sidebar-layout {
+      display: flex;
+      gap: 2rem;
+    }
+ 
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+ 
+    .left-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      margin-top: 0.5rem;
+    }
+ 
+    .sidebar-section {
+      margin-bottom: 1.8rem;
+      font-size: 0.75rem;
+    }
+ 
+    .sidebar-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+ 
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+ 
+    .sidebar-list li {
+      margin-bottom: 0.5rem;
+    }
+ 
+    .sidebar-list button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      text-align: left;
+      padding: 4px 0;
+      width: 100%;
+      transition: color 0.2s;
+      font-family: inherit;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+ 
+    .sidebar-list button:hover {
+      color: var(--accent);
+    }
+ 
+    .clear-recent {
+      font-size: 0.65rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.3rem;
+      padding: 0;
+      font-style: italic;
+    }
+ 
+    .clear-recent:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+ 
+    .bookmark-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 0.6rem;
+    }
+ 
+    .bookmark-item button {
+      flex: 1;
+    }
+ 
+    .remove-bookmark {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.7rem;
+      padding: 2px 4px;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+ 
+    .remove-bookmark:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+ 
+    .empty-sidebar-message {
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-style: italic;
+    }
+ 
+    @media (max-width: 800px) {
+      .left-sidebar {
+        display: none;
+      }
+    }
+ 
+    /* Toast */
+    .bookmark-toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      z-index: 200;
+      animation: fadeUp 0.3s ease;
+    }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
  
     .about-section {
@@ -337,6 +476,8 @@
       border-top: 1px solid var(--border);
       padding-top: 0.7rem;
       transition: border-color var(--transition);
+      flex-wrap: wrap;
+      gap: 8px;
     }
  
     .card-date { font-size: 0.68rem; color: var(--muted); }
@@ -352,6 +493,21 @@
       transition: color 0.15s, border-color 0.15s;
     }
     .card-link:hover { color: var(--accent); border-color: var(--accent); }
+ 
+    .bookmark-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      transition: color 0.15s, border-color 0.15s;
+      padding: 0;
+    }
+    .bookmark-btn:hover { color: var(--accent); border-color: var(--accent); }
  
     .empty-state {
       text-align: center;
@@ -414,7 +570,6 @@
     @media (max-width: 600px) {
       .search-bar input { width: 100%; }
       .live-indicator { display: none; }
-      .about-section p { font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -454,16 +609,50 @@
  
 <main>
   <div class="about-section">
-    <p><strong>NewsAnywhere</strong> — Search latest news by location, genre/topic, and keywords. Real-time updates from global sources. Built for explorers by an explorer herself.</p>
+    <p><strong>NewsAnywhere</strong> — Search latest news by <strong>location</strong>, <strong>genre/topic</strong>, and <strong>keywords</strong>. Real-time updates from global sources. Built for explorers by an explorer herself.</p>
   </div>
-  <div id="status"></div>
-  <div id="results">
-    <div class="empty-state">
-      <div class="big">📰</div>
-      <p>Start typing to fetch live news instantly.</p>
+  
+  <div class="sidebar-layout">
+    <!-- LEFT SIDEBAR -->
+    <aside class="left-sidebar">
+      <!-- Trending Searches -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">🔥 Trending</div>
+        <ul class="sidebar-list" id="trendingList">
+          <li><button onclick="trendingSearch('India', 'education', 'cbse')">India · education · cbse</button></li>
+          <li><button onclick="trendingSearch('France', 'fashion', 'Paris')">France · fashion · Paris</button></li>
+          <li><button onclick="trendingSearch('USA', 'technology', 'AI')">USA · technology · AI</button></li>
+          <li><button onclick="trendingSearch('Japan', 'anime', 'Ghibli')">Japan · anime · Ghibli</button></li>
+          <li><button onclick="trendingSearch('UK', 'business', 'economy')">UK · business · economy</button></li>
+        </ul>
+      </div>
+
+      <!-- Recent Searches -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">📌 Recent</div>
+        <ul class="sidebar-list" id="recentList"></ul>
+        <button class="clear-recent" id="clearRecentBtn" style="display: none;">Clear all</button>
+      </div>
+
+      <!-- Bookmarks -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">🔖 Bookmarks</div>
+        <ul class="sidebar-list" id="bookmarkList"></ul>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div id="status"></div>
+      <div id="results">
+        <div class="empty-state">
+          <div class="big">📰</div>
+          <p>Start typing to fetch live news instantly.</p>
+        </div>
+      </div>
+      <div id="load-more-trigger"></div>
     </div>
   </div>
-  <div id="load-more-trigger"></div>
 </main>
  
 <script>
@@ -471,7 +660,7 @@
   document.getElementById('dateline').textContent =
     new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }).toUpperCase();
  
-  // LIVE CLOCK (updates every second)
+  // LIVE CLOCK
   function updateLiveTime() {
     const now = new Date();
     const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -499,7 +688,149 @@
   let totalLoaded = 0;
   const PAGE_SIZE = 10;
  
-  // LIVE SEARCH — debounced 500ms
+  // Helper functions
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+ 
+  function showToast(message, duration = 2000) {
+    let toast = document.querySelector('.bookmark-toast');
+    if (toast) toast.remove();
+    toast = document.createElement('div');
+    toast.className = 'bookmark-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), duration);
+  }
+ 
+  // RECENT SEARCHES
+  function getRecentSearches() {
+    const recent = localStorage.getItem('newsanywhere_recent');
+    return recent ? JSON.parse(recent) : [];
+  }
+ 
+  function saveRecentSearch(location, genre, keyword) {
+    const query = [location, genre, keyword].filter(Boolean).join(' ');
+    if (!query) return;
+    
+    let recent = getRecentSearches();
+    const newSearch = { location, genre, keyword, query, timestamp: Date.now() };
+    recent = recent.filter(s => s.query !== query);
+    recent.unshift(newSearch);
+    recent = recent.slice(0, 5);
+    
+    localStorage.setItem('newsanywhere_recent', JSON.stringify(recent));
+    renderRecentSearches();
+  }
+ 
+  function renderRecentSearches() {
+    const recent = getRecentSearches();
+    const container = document.getElementById('recentList');
+    const clearBtn = document.getElementById('clearRecentBtn');
+    
+    if (!container) return;
+    
+    if (recent.length === 0) {
+      container.innerHTML = '<li class="empty-sidebar-message">— no recent searches —</li>';
+      if (clearBtn) clearBtn.style.display = 'none';
+      return;
+    }
+    
+    if (clearBtn) clearBtn.style.display = 'block';
+    
+    container.innerHTML = recent.map(s => `
+      <li>
+        <button onclick="recentSearch('${escapeHtml(s.location || '')}', '${escapeHtml(s.genre || '')}', '${escapeHtml(s.keyword || '')}')">
+          ${escapeHtml(s.query)}
+        </button>
+      </li>
+    `).join('');
+  }
+ 
+  function recentSearch(location, genre, keyword) {
+    document.getElementById('location').value = location || '';
+    document.getElementById('genre').value = genre || '';
+    document.getElementById('keyword').value = keyword || '';
+    onInputChange();
+  }
+ 
+  function clearRecentSearches() {
+    localStorage.removeItem('newsanywhere_recent');
+    renderRecentSearches();
+    showToast('Recent searches cleared', 1500);
+  }
+ 
+  // TRENDING SEARCH
+  function trendingSearch(location, genre, keyword) {
+    document.getElementById('location').value = location || '';
+    document.getElementById('genre').value = genre || '';
+    document.getElementById('keyword').value = keyword || '';
+    onInputChange();
+  }
+ 
+  // BOOKMARKS
+  function getBookmarks() {
+    const bookmarks = localStorage.getItem('newsanywhere_bookmarks');
+    return bookmarks ? JSON.parse(bookmarks) : [];
+  }
+ 
+  function saveBookmark(article) {
+    let bookmarks = getBookmarks();
+    if (bookmarks.some(b => b.url === article.url)) {
+      showToast('Already bookmarked', 1500);
+      return false;
+    }
+    
+    bookmarks.unshift({
+      title: article.title,
+      url: article.url,
+      source: article.source?.name || 'Unknown',
+      timestamp: Date.now()
+    });
+    bookmarks = bookmarks.slice(0, 20);
+    
+    localStorage.setItem('newsanywhere_bookmarks', JSON.stringify(bookmarks));
+    renderBookmarks();
+    showToast('📌 Saved to bookmarks', 1500);
+    return true;
+  }
+ 
+  function removeBookmark(url) {
+    let bookmarks = getBookmarks();
+    bookmarks = bookmarks.filter(b => b.url !== url);
+    localStorage.setItem('newsanywhere_bookmarks', JSON.stringify(bookmarks));
+    renderBookmarks();
+    showToast('Removed from bookmarks', 1500);
+  }
+ 
+  function renderBookmarks() {
+    const bookmarks = getBookmarks();
+    const container = document.getElementById('bookmarkList');
+    
+    if (!container) return;
+    
+    if (bookmarks.length === 0) {
+      container.innerHTML = '<li class="empty-sidebar-message">— no saved articles —</li>';
+      return;
+    }
+    
+    container.innerHTML = bookmarks.map(b => `
+      <li class="bookmark-item">
+        <button onclick="window.open('${b.url}', '_blank')" title="${escapeHtml(b.title)}">
+          ${escapeHtml(b.title.length > 40 ? b.title.slice(0, 40) + '…' : b.title)}
+        </button>
+        <button class="remove-bookmark" onclick="removeBookmark('${b.url}')" title="Remove">✕</button>
+      </li>
+    `).join('');
+  }
+ 
+  // LIVE SEARCH
   function onInputChange() {
     clearTimeout(debounceTimer);
     const dot = document.getElementById('liveDot');
@@ -509,9 +840,9 @@
       dot.classList.remove('active');
  
       const location = document.getElementById('location').value.trim();
-      const genre    = document.getElementById('genre').value.trim();
-      const keyword  = document.getElementById('keyword').value.trim();
-      const query    = [location, genre, keyword].filter(Boolean).join(' ');
+      const genre = document.getElementById('genre').value.trim();
+      const keyword = document.getElementById('keyword').value.trim();
+      const query = [location, genre, keyword].filter(Boolean).join(' ');
  
       if (!query) {
         document.getElementById('results').innerHTML = `
@@ -530,6 +861,9 @@
       currentQuery = query;
       document.getElementById('results').innerHTML = '';
       fetchNews(true);
+      
+      // Save to recent searches
+      saveRecentSearch(location, genre, keyword);
     }, 500);
   }
  
@@ -538,19 +872,19 @@
     onInputChange();
   }
  
-  // FETCH - GETS REAL, FRESH NEWS FROM NEWSAPI
+  // FETCH
   async function fetchNews(reset = false) {
     if (isFetching || !hasMore) return;
     isFetching = true;
  
     const location = document.getElementById('location').value.trim();
-    const genre    = document.getElementById('genre').value.trim();
-    const keyword  = document.getElementById('keyword').value.trim();
+    const genre = document.getElementById('genre').value.trim();
+    const keyword = document.getElementById('keyword').value.trim();
  
     const params = new URLSearchParams();
     if (location) params.append('location', location);
-    if (genre)    params.append('genre', genre);
-    if (keyword)  params.append('keyword', keyword);
+    if (genre) params.append('genre', genre);
+    if (keyword) params.append('keyword', keyword);
     params.append('page', currentPage);
     params.append('pageSize', PAGE_SIZE);
  
@@ -565,6 +899,26 @@
     try {
       const res = await fetch(`/api/news?${params}`);
       const data = await res.json();
+ 
+      if (data.invalidQuery) {
+        if (reset) {
+          document.getElementById('results').innerHTML = `
+            <div class="error-box">${data.error || 'Please enter a more specific search'}</div>`;
+        }
+        document.getElementById('load-more-trigger').innerHTML = '';
+        isFetching = false;
+        return;
+      }
+ 
+      if (data.rateLimited) {
+        if (reset) {
+          document.getElementById('results').innerHTML = `
+            <div class="error-box">📊 ${data.error}<br><small>Free tier: 100 requests/day. Try again tomorrow.</small></div>`;
+        }
+        document.getElementById('load-more-trigger').innerHTML = '';
+        isFetching = false;
+        return;
+      }
  
       if (!data.articles || data.articles.length === 0) {
         if (reset) {
@@ -583,23 +937,16 @@
       totalLoaded += articles.length;
  
       if (reset) document.getElementById('results').innerHTML = '';
- 
-      if (articles.length === 0 && reset) {
-        document.getElementById('results').innerHTML = `
-          <div class="empty-state">
-            <div class="big">🔍</div>
-            <p>No results. Try different terms.</p>
-          </div>`;
-        document.getElementById('load-more-trigger').innerHTML = '';
-        isFetching = false;
-        return;
+      appendCards(articles);
+      
+      if (data.usingTopHeadlines) {
+        setStatus(`📰 Top headlines ${location ? 'from ' + location : ''} ${genre ? 'in ' + genre : ''} • ${totalLoaded} stories`);
+      } else {
+        setStatus(`${totalLoaded} results for "${currentQuery}"`);
       }
  
-      appendCards(articles);
-      setStatus(`${totalLoaded} stories for "${currentQuery}"`);
- 
-      if (articles.length < PAGE_SIZE || totalLoaded >= 100) {
-        hasMore = false;
+      hasMore = data.hasMore === true;
+      if (!hasMore || articles.length < PAGE_SIZE) {
         document.getElementById('load-more-trigger').innerHTML =
           `<div class="end-marker">End of results</div>`;
       } else {
@@ -609,10 +956,12 @@
  
     } catch (err) {
       console.error('Fetch error:', err);
-      if (reset) document.getElementById('results').innerHTML = `
-        <div class="error-box">
-          Unable to connect to news server. Please refresh and try again.
-        </div>`;
+      if (reset) {
+        document.getElementById('results').innerHTML = `
+          <div class="error-box">
+            ⚠️ Could not connect to server. Please refresh and try again.
+          </div>`;
+      }
       document.getElementById('load-more-trigger').innerHTML = '';
     }
  
@@ -642,10 +991,10 @@
   }
  
   function renderCard(a) {
-    const date   = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
-    const img    = a.urlToImage ? `<img class="card-img" src="${a.urlToImage}" alt="" loading="lazy" onerror="this.style.display='none'"/>` : '';
+    const date = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
+    const img = a.urlToImage ? `<img class="card-img" src="${a.urlToImage}" alt="" loading="lazy" onerror="this.style.display='none'"/>` : '';
     const source = a.source?.name || 'Unknown';
-    const desc   = a.description ? `<p class="card-desc">${a.description.slice(0,130)}…</p>` : '';
+    const desc = a.description ? `<p class="card-desc">${a.description.slice(0,130)}…</p>` : '';
     return `
       <div class="article-card">
         ${img}
@@ -654,7 +1003,10 @@
         ${desc}
         <div class="card-footer">
           <span class="card-date">${date}</span>
-          <a class="card-link" href="${a.url}" target="_blank" rel="noopener">Read →</a>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="bookmark-btn" onclick="saveBookmark(${JSON.stringify(a).replace(/</g, '\\u003c')})">🔖 Save</button>
+            <a class="card-link" href="${a.url}" target="_blank" rel="noopener">Read →</a>
+          </div>
         </div>
       </div>`;
   }
@@ -671,6 +1023,11 @@
   function setStatus(msg) {
     document.getElementById('status').innerHTML = msg;
   }
+  
+  // Initialize sidebar
+  renderRecentSearches();
+  renderBookmarks();
+  document.getElementById('clearRecentBtn')?.addEventListener('click', clearRecentSearches);
 </script>
 </body>
 </html>
