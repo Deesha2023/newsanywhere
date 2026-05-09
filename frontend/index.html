@@ -511,11 +511,36 @@
  
     .empty-state {
       text-align: center;
-      padding: 4rem 2rem;
+      padding: 3rem 2rem;
       color: var(--muted);
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
     }
-    .empty-state .big { font-size: 4rem; opacity: 0.2; margin-bottom: 0.5rem; }
-    .empty-state p { font-size: 0.88rem; }
+    .empty-state .big { font-size: 4rem; opacity: 0.3; margin-bottom: 0.5rem; }
+    .empty-state p { font-size: 0.88rem; line-height: 1.5; }
+ 
+    .suggestions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+ 
+    .suggestion-chip {
+      background: var(--border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--ink);
+    }
+    .suggestion-chip:hover {
+      background: var(--accent);
+      color: white;
+    }
  
     .error-box {
       background: var(--card);
@@ -525,6 +550,7 @@
       font-size: 0.85rem;
       color: var(--accent);
       margin-bottom: 1.5rem;
+      border-radius: 8px;
     }
  
     #load-more-trigger {
@@ -570,6 +596,7 @@
     @media (max-width: 600px) {
       .search-bar input { width: 100%; }
       .live-indicator { display: none; }
+      .suggestions { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
@@ -872,7 +899,7 @@
     onInputChange();
   }
  
-  // FETCH
+  // FETCH - UPDATED WITH SMART NO RESULTS HANDLING
   async function fetchNews(reset = false) {
     if (isFetching || !hasMore) return;
     isFetching = true;
@@ -920,18 +947,43 @@
         return;
       }
  
+      // ========== SMART NO RESULTS HANDLING ==========
       if (!data.articles || data.articles.length === 0) {
         if (reset) {
+          const words = currentQuery.split(' ');
+          
+          // Generate smart suggestions
+          let suggestion1 = '';
+          let suggestion2 = '';
+          
+          if (words.length >= 3) {
+            suggestion1 = words.slice(0, 2).join(' ');
+            suggestion2 = words[0];
+          } else if (words.length === 2) {
+            suggestion1 = words[0];
+            suggestion2 = words[1];
+          } else {
+            suggestion1 = currentQuery;
+            suggestion2 = '';
+          }
+          
           document.getElementById('results').innerHTML = `
             <div class="empty-state">
-              <div class="big">🔍</div>
-              <p>No articles found. Try different keywords.</p>
+              <div class="big">📭</div>
+              <p><strong>No specific articles found for "${escapeHtml(currentQuery)}"</strong></p>
+              <p style="margin-top: 8px; font-size: 0.8rem;">News sources may not have matched all these details at this moment.</p>
+              <div class="suggestions">
+                ${suggestion1 ? `<span class="suggestion-chip" onclick="trendingSearch('${escapeHtml(suggestion1)}', '', '')">💡 Try: ${escapeHtml(suggestion1)}</span>` : ''}
+                ${suggestion2 ? `<span class="suggestion-chip" onclick="trendingSearch('${escapeHtml(suggestion2)}', '', '')">📍 Try just: ${escapeHtml(suggestion2)}</span>` : ''}
+                <span class="suggestion-chip" onclick="trendingSearch('${escapeHtml(words[0] || '')}', '', '')">🌍 Search by location only</span>
+              </div>
             </div>`;
         }
         document.getElementById('load-more-trigger').innerHTML = '';
         isFetching = false;
         return;
       }
+      // ==============================================
  
       const articles = data.articles.filter(a => a.title && a.title !== '[Removed]');
       totalLoaded += articles.length;
