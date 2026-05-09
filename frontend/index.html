@@ -199,131 +199,9 @@
     }
  
     main {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
-    }
- 
-    .sidebar-layout {
-      display: flex;
-      gap: 2rem;
-    }
- 
-    .main-content {
-      flex: 1;
-      min-width: 0;
-    }
- 
-    .left-sidebar {
-      width: 240px;
-      flex-shrink: 0;
-      margin-top: 0.5rem;
-    }
- 
-    .sidebar-section {
-      margin-bottom: 1.8rem;
-      font-size: 0.75rem;
-    }
- 
-    .sidebar-title {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.8rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
- 
-    .sidebar-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
- 
-    .sidebar-list li {
-      margin-bottom: 0.5rem;
-    }
- 
-    .sidebar-list button {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 0.75rem;
-      cursor: pointer;
-      text-align: left;
-      padding: 4px 0;
-      width: 100%;
-      transition: color 0.2s;
-      font-family: inherit;
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.3;
-    }
- 
-    .sidebar-list button:hover {
-      color: var(--accent);
-    }
- 
-    .bookmark-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
-      margin-bottom: 0.6rem;
-    }
- 
-    .bookmark-item button {
-      flex: 1;
-      text-align: left;
-    }
- 
-    .remove-bookmark {
-      background: none;
-      border: none;
-      color: var(--muted);
-      cursor: pointer;
-      font-size: 0.7rem;
-      padding: 2px 4px;
-      opacity: 0.5;
-      transition: opacity 0.2s;
-    }
- 
-    .remove-bookmark:hover {
-      opacity: 1;
-      color: var(--accent);
-    }
- 
-    .empty-sidebar-message {
-      color: var(--muted);
-      font-size: 0.7rem;
-      font-style: italic;
-    }
- 
-    @media (max-width: 800px) {
-      .left-sidebar {
-        display: none;
-      }
-    }
- 
-    .bookmark-toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--accent);
-      color: white;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      z-index: 200;
-      animation: fadeUp 0.3s ease;
-    }
- 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
  
     .about-section {
@@ -354,18 +232,6 @@
       min-height: 1.4em;
     }
  
-    .spinner {
-      display: inline-block;
-      width: 13px; height: 13px;
-      border: 2px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 6px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
- 
     #results {
       columns: 3 280px;
       column-gap: 1.4rem;
@@ -389,9 +255,8 @@
       margin-bottom: 8px;
     }
  
-    .skeleton-line.tall { height: 140px; margin-bottom: 12px; }
+    .skeleton-line.img { height: 140px; margin-bottom: 12px; }
     .skeleton-line.short { width: 55%; }
-    .skeleton-line.medium { width: 80%; }
  
     @keyframes shimmer {
       0% { background-position: 200% 0; }
@@ -405,18 +270,13 @@
       border: 1px solid var(--border);
       border-top: 3px solid var(--ink);
       padding: 1.2rem;
-      opacity: 0;
-      transform: translateY(14px);
-      animation: fadeUp 0.4s forwards;
-      transition: box-shadow 0.2s, background var(--transition), border-color var(--transition);
+      transition: box-shadow 0.2s, transform 0.2s;
     }
  
     .article-card:hover {
       box-shadow: 4px 4px 0 var(--ink);
-      transform: translateY(0) !important;
+      transform: translateY(-3px);
     }
- 
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
  
     .card-source {
       font-size: 0.63rem;
@@ -434,13 +294,12 @@
       line-height: 1.3;
       margin-bottom: 0.6rem;
       color: var(--ink);
-      transition: color var(--transition);
     }
  
     .card-desc {
       font-size: 0.8rem;
       color: var(--muted);
-      line-height: 1.55;
+      line-height: 1.5;
       margin-bottom: 0.8rem;
     }
  
@@ -458,9 +317,6 @@
       align-items: center;
       border-top: 1px solid var(--border);
       padding-top: 0.7rem;
-      transition: border-color var(--transition);
-      flex-wrap: wrap;
-      gap: 8px;
     }
  
     .card-date { font-size: 0.68rem; color: var(--muted); }
@@ -473,7 +329,6 @@
       color: var(--ink);
       text-decoration: none;
       border-bottom: 1px solid var(--ink);
-      transition: color 0.15s, border-color 0.15s;
     }
     .card-link:hover { color: var(--accent); border-color: var(--accent); }
  
@@ -487,8 +342,7 @@
       text-transform: uppercase;
       color: var(--ink);
       border-bottom: 1px solid var(--ink);
-      transition: color 0.15s, border-color 0.15s;
-      padding: 0;
+      padding: 0 0 2px 0;
     }
     .bookmark-btn:hover { color: var(--accent); border-color: var(--accent); }
  
@@ -499,16 +353,6 @@
     }
     .empty-state .big { font-size: 4rem; opacity: 0.2; margin-bottom: 0.5rem; }
     .empty-state p { font-size: 0.88rem; }
- 
-    .error-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--accent);
-      padding: 1rem 1.2rem;
-      font-size: 0.85rem;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-    }
  
     #load-more-trigger {
       text-align: center;
@@ -528,6 +372,7 @@
       vertical-align: middle;
       margin-right: 6px;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
  
     .end-marker {
       text-align: center;
@@ -539,20 +384,28 @@
     }
     .end-marker::before, .end-marker::after { content: '— '; }
  
-    .article-card:nth-child(1)  { animation-delay: 0.04s; }
-    .article-card:nth-child(2)  { animation-delay: 0.08s; }
-    .article-card:nth-child(3)  { animation-delay: 0.12s; }
-    .article-card:nth-child(4)  { animation-delay: 0.16s; }
-    .article-card:nth-child(5)  { animation-delay: 0.20s; }
-    .article-card:nth-child(6)  { animation-delay: 0.24s; }
-    .article-card:nth-child(7)  { animation-delay: 0.28s; }
-    .article-card:nth-child(8)  { animation-delay: 0.32s; }
-    .article-card:nth-child(9)  { animation-delay: 0.36s; }
-    .article-card:nth-child(10) { animation-delay: 0.40s; }
+    .bookmark-toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      z-index: 200;
+      animation: fadeUp 0.3s ease;
+    }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
  
     @media (max-width: 600px) {
       .search-bar input { width: 100%; }
       .live-indicator { display: none; }
+      #results { columns: 1; }
     }
   </style>
 </head>
@@ -572,15 +425,15 @@
   </div>
   <div class="search-bar">
     <div class="input-wrap">
-      <input type="text" id="location" placeholder="Location" oninput="onInputChange()" />
+      <input type="text" id="location" placeholder="Location" />
       <button class="clear-btn" onclick="clearInput('location')">✕</button>
     </div>
     <div class="input-wrap">
-      <input type="text" id="genre" placeholder="Genre" oninput="onInputChange()" />
+      <input type="text" id="genre" placeholder="Topic" />
       <button class="clear-btn" onclick="clearInput('genre')">✕</button>
     </div>
     <div class="input-wrap">
-      <input type="text" id="keyword" placeholder="Keyword" oninput="onInputChange()" />
+      <input type="text" id="keyword" placeholder="Keyword" />
       <button class="clear-btn" onclick="clearInput('keyword')">✕</button>
     </div>
     <div class="live-indicator">
@@ -592,28 +445,17 @@
  
 <main>
   <div class="about-section">
-    <p><strong>NewsAnywhere</strong> — Search latest news by <strong>location</strong>, <strong>genre/topic</strong>, and <strong>keywords</strong>. Real-time updates from global sources. Built for explorers by an explorer herself.</p>
+    <p><strong>NewsAnywhere</strong> — Search news by location, topic, and keywords. Built for explorers by an explorer herself.</p>
   </div>
   
-  <div class="sidebar-layout">
-    <aside class="left-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">🔖 Bookmarks</div>
-        <ul class="sidebar-list" id="bookmarkList"></ul>
-      </div>
-    </aside>
-
-    <div class="main-content">
-      <div id="status"></div>
-      <div id="results">
-        <div class="empty-state">
-          <div class="big">📰</div>
-          <p>Start typing to fetch live news instantly.</p>
-        </div>
-      </div>
-      <div id="load-more-trigger"></div>
+  <div id="status"></div>
+  <div id="results">
+    <div class="empty-state">
+      <div class="big">📰</div>
+      <p>Start typing to fetch live news instantly.</p>
     </div>
   </div>
+  <div id="load-more-trigger"></div>
 </main>
  
 <script>
@@ -621,11 +463,9 @@
   document.getElementById('dateline').textContent =
     new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }).toUpperCase();
  
-  // LIVE CLOCK
   function updateLiveTime() {
     const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    document.getElementById('liveTime').textContent = `🕘 ${timeString} IST • LIVE`;
+    document.getElementById('liveTime').textContent = `🕘 ${now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' })} IST • LIVE`;
   }
   updateLiveTime();
   setInterval(updateLiveTime, 1000);
@@ -644,109 +484,48 @@
   let debounceTimer = null;
   let currentPage = 1;
   let currentQuery = '';
-  let isFetching = false;
+  let isLoading = false;
   let hasMore = true;
   let totalLoaded = 0;
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 12;
  
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
- 
-  function showToast(message, duration = 2000) {
+  function showToast(msg, duration = 2000) {
     let toast = document.querySelector('.bookmark-toast');
     if (toast) toast.remove();
     toast = document.createElement('div');
     toast.className = 'bookmark-toast';
-    toast.textContent = message;
+    toast.textContent = msg;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), duration);
   }
  
   // BOOKMARKS
-  function getBookmarks() {
-    const bookmarks = localStorage.getItem('newsanywhere_bookmarks');
-    return bookmarks ? JSON.parse(bookmarks) : [];
-  }
- 
   function saveBookmark(article) {
-    let bookmarks = getBookmarks();
+    let bookmarks = JSON.parse(localStorage.getItem('na_bookmarks') || '[]');
     if (bookmarks.some(b => b.url === article.url)) {
-      showToast('Already bookmarked', 1500);
-      return false;
-    }
-    
-    bookmarks.unshift({
-      title: article.title,
-      url: article.url,
-      source: article.source?.name || 'Unknown',
-      timestamp: Date.now()
-    });
-    bookmarks = bookmarks.slice(0, 20);
-    
-    localStorage.setItem('newsanywhere_bookmarks', JSON.stringify(bookmarks));
-    renderBookmarks();
-    showToast('📌 Saved to bookmarks', 1500);
-    return true;
-  }
- 
-  function removeBookmark(url) {
-    let bookmarks = getBookmarks();
-    bookmarks = bookmarks.filter(b => b.url !== url);
-    localStorage.setItem('newsanywhere_bookmarks', JSON.stringify(bookmarks));
-    renderBookmarks();
-    showToast('Removed from bookmarks', 1500);
-  }
- 
-  function renderBookmarks() {
-    const bookmarks = getBookmarks();
-    const container = document.getElementById('bookmarkList');
-    
-    if (!container) return;
-    
-    if (bookmarks.length === 0) {
-      container.innerHTML = '<li class="empty-sidebar-message">— no saved articles —</li>';
+      showToast('Already bookmarked');
       return;
     }
-    
-    container.innerHTML = bookmarks.map(b => `
-      <li class="bookmark-item">
-        <button onclick="window.open('${b.url}', '_blank')" title="${escapeHtml(b.title)}">
-          ${escapeHtml(b.title.length > 40 ? b.title.slice(0, 40) + '…' : b.title)}
-        </button>
-        <button class="remove-bookmark" onclick="removeBookmark('${b.url}')" title="Remove">✕</button>
-      </li>
-    `).join('');
+    bookmarks.unshift({ title: article.title, url: article.url, source: article.source?.name });
+    localStorage.setItem('na_bookmarks', JSON.stringify(bookmarks.slice(0, 20)));
+    showToast('📌 Saved');
   }
  
-  // SEARCH
   function onInputChange() {
     clearTimeout(debounceTimer);
-    const dot = document.getElementById('liveDot');
-    dot.classList.add('active');
+    document.getElementById('liveDot').classList.add('active');
  
     debounceTimer = setTimeout(() => {
-      dot.classList.remove('active');
- 
+      document.getElementById('liveDot').classList.remove('active');
+      
       const location = document.getElementById('location').value.trim();
       const genre = document.getElementById('genre').value.trim();
       const keyword = document.getElementById('keyword').value.trim();
       const query = [location, genre, keyword].filter(Boolean).join(' ');
  
       if (!query) {
-        document.getElementById('results').innerHTML = `
-          <div class="empty-state">
-            <div class="big">📰</div>
-            <p>Start typing to fetch live news instantly.</p>
-          </div>`;
+        document.getElementById('results').innerHTML = `<div class="empty-state"><div class="big">📰</div><p>Start typing to fetch live news instantly.</p></div>`;
         document.getElementById('load-more-trigger').innerHTML = '';
-        setStatus('');
         return;
       }
  
@@ -755,7 +534,7 @@
       totalLoaded = 0;
       currentQuery = query;
       document.getElementById('results').innerHTML = '';
-      fetchNews(true);
+      fetchNews();
     }, 500);
   }
  
@@ -764,9 +543,9 @@
     onInputChange();
   }
  
-  async function fetchNews(reset = false) {
-    if (isFetching || !hasMore) return;
-    isFetching = true;
+  async function fetchNews() {
+    if (isLoading || !hasMore) return;
+    isLoading = true;
  
     const location = document.getElementById('location').value.trim();
     const genre = document.getElementById('genre').value.trim();
@@ -779,129 +558,70 @@
     params.append('page', currentPage);
     params.append('pageSize', PAGE_SIZE);
  
-    if (reset) {
-      showSkeletons();
-      setStatus('Fetching latest news...');
+    if (currentPage === 1) {
+      document.getElementById('results').innerHTML = '<div class="skeleton-card"><div class="skeleton-line img"></div><div class="skeleton-line short"></div><div class="skeleton-line short"></div></div>'.repeat(6);
     } else {
-      document.getElementById('load-more-trigger').innerHTML =
-        `<span class="load-spinner"></span> Loading more stories…`;
+      document.getElementById('load-more-trigger').innerHTML = '<span class="load-spinner"></span> Loading...';
     }
  
     try {
       const res = await fetch(`/api/news?${params}`);
       const data = await res.json();
  
-      if (data.error) {
-        if (reset) {
-          document.getElementById('results').innerHTML = `
-            <div class="empty-state">
-              <div class="big">⚠️</div>
-              <p>${data.error}</p>
-            </div>`;
-        }
-        document.getElementById('load-more-trigger').innerHTML = '';
-        isFetching = false;
-        return;
-      }
- 
-      if (!data.articles || data.articles.length === 0) {
-        if (reset) {
-          document.getElementById('results').innerHTML = `
-            <div class="empty-state">
-              <div class="big">🔍</div>
-              <p>No articles found. Try different keywords.</p>
-            </div>`;
-        }
-        document.getElementById('load-more-trigger').innerHTML = '';
-        isFetching = false;
-        return;
-      }
- 
-      totalLoaded += data.articles.length;
- 
-      if (reset) document.getElementById('results').innerHTML = '';
-      appendCards(data.articles);
-      
-      setStatus(`${totalLoaded} stories for "${currentQuery}"`);
- 
-      hasMore = data.hasMore === true;
-      if (!hasMore || data.articles.length < PAGE_SIZE) {
-        document.getElementById('load-more-trigger').innerHTML =
-          `<div class="end-marker">End of results</div>`;
-      } else {
+      if (data.articles && data.articles.length > 0) {
+        if (currentPage === 1) document.getElementById('results').innerHTML = '';
+        appendArticles(data.articles);
+        totalLoaded += data.articles.length;
+        document.getElementById('status').innerHTML = `📰 ${totalLoaded} stories for "${currentQuery}"`;
+        hasMore = data.hasMore === true;
         currentPage++;
-        document.getElementById('load-more-trigger').innerHTML = '';
+      } else {
+        if (currentPage === 1) {
+          document.getElementById('results').innerHTML = `<div class="empty-state"><div class="big">🔍</div><p>No results. Try different words.</p></div>`;
+        }
+        hasMore = false;
       }
  
+      document.getElementById('load-more-trigger').innerHTML = hasMore ? '' : '<div class="end-marker">End of results</div>';
     } catch (err) {
-      console.error('Fetch error:', err);
-      if (reset) {
-        document.getElementById('results').innerHTML = `
-          <div class="empty-state">
-            <div class="big">⚠️</div>
-            <p>Connection error. Please refresh and try again.</p>
-          </div>`;
-      }
-      document.getElementById('load-more-trigger').innerHTML = '';
+      document.getElementById('results').innerHTML = `<div class="empty-state"><div class="big">⚠️</div><p>Connection error. Refresh and try again.</p></div>`;
     }
  
-    isFetching = false;
+    isLoading = false;
   }
  
-  function showSkeletons() {
-    document.getElementById('results').innerHTML = Array.from({length: 6}, () => `
-      <div class="skeleton-card">
-        <div class="skeleton-line tall"></div>
-        <div class="skeleton-line short"></div>
-        <div class="skeleton-line medium"></div>
-        <div class="skeleton-line medium"></div>
-        <div class="skeleton-line short"></div>
-      </div>`).join('');
-  }
- 
-  function appendCards(articles) {
-    const el = document.getElementById('results');
-    articles.forEach(a => {
-      const div = document.createElement('div');
-      div.innerHTML = renderCard(a);
-      el.appendChild(div.firstElementChild);
+  function appendArticles(articles) {
+    const container = document.getElementById('results');
+    articles.forEach(article => {
+      const card = document.createElement('div');
+      card.className = 'article-card';
+      card.innerHTML = `
+        ${article.urlToImage ? `<img class="card-img" src="${article.urlToImage}" onerror="this.style.display='none'" />` : ''}
+        <div class="card-source">${article.source?.name || 'News'}</div>
+        <div class="card-title">${article.title || ''}</div>
+        ${article.description ? `<p class="card-desc">${article.description.slice(0, 120)}…</p>` : ''}
+        <div class="card-footer">
+          <span class="card-date">${article.publishedAt ? new Date(article.publishedAt).toLocaleDateString() : ''}</span>
+          <div style="display: flex; gap: 12px;">
+            <button class="bookmark-btn" onclick="saveBookmark(${JSON.stringify(article).replace(/</g, '\\u003c')})">🔖 Save</button>
+            <a class="card-link" href="${article.url}" target="_blank">Read →</a>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
     });
   }
  
-  function renderCard(a) {
-    const date = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
-    const img = a.urlToImage ? `<img class="card-img" src="${a.urlToImage}" alt="" loading="lazy" onerror="this.style.display='none'"/>` : '';
-    const source = a.source?.name || 'Unknown';
-    const desc = a.description ? `<p class="card-desc">${a.description.slice(0,130)}…</p>` : '';
-    return `
-      <div class="article-card">
-        ${img}
-        <div class="card-source">${source}</div>
-        <div class="card-title">${a.title}</div>
-        ${desc}
-        <div class="card-footer">
-          <span class="card-date">${date}</span>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button class="bookmark-btn" onclick="saveBookmark(${JSON.stringify(a).replace(/</g, '\\u003c')})">🔖 Save</button>
-            <a class="card-link" href="${a.url}" target="_blank" rel="noopener">Read →</a>
-          </div>
-        </div>
-      </div>`;
-  }
+  // Event listeners
+  document.getElementById('location').addEventListener('input', onInputChange);
+  document.getElementById('genre').addEventListener('input', onInputChange);
+  document.getElementById('keyword').addEventListener('input', onInputChange);
  
+  // Infinite scroll
   const observer = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting && !isFetching && hasMore && currentQuery) {
-      fetchNews(false);
-    }
-  }, { rootMargin: '400px' });
- 
+    if (entries[0].isIntersecting && !isLoading && hasMore && currentQuery) fetchNews();
+  }, { rootMargin: '300px' });
   observer.observe(document.getElementById('load-more-trigger'));
- 
-  function setStatus(msg) {
-    document.getElementById('status').innerHTML = msg;
-  }
-  
-  renderBookmarks();
 </script>
 </body>
 </html>
