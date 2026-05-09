@@ -204,7 +204,6 @@
       padding: 2rem 1.5rem 4rem;
     }
  
-    /* Sidebar Layout - Only Bookmarks */
     .sidebar-layout {
       display: flex;
       gap: 2rem;
@@ -309,7 +308,6 @@
       }
     }
  
-    /* Toast */
     .bookmark-toast {
       position: fixed;
       bottom: 20px;
@@ -598,7 +596,6 @@
   </div>
   
   <div class="sidebar-layout">
-    <!-- LEFT SIDEBAR - ONLY BOOKMARKS -->
     <aside class="left-sidebar">
       <div class="sidebar-section">
         <div class="sidebar-title">🔖 Bookmarks</div>
@@ -606,7 +603,6 @@
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <div class="main-content">
       <div id="status"></div>
       <div id="results">
@@ -653,7 +649,6 @@
   let totalLoaded = 0;
   const PAGE_SIZE = 10;
  
-  // Helper functions
   function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/[&<>]/g, function(m) {
@@ -674,7 +669,7 @@
     setTimeout(() => toast.remove(), duration);
   }
  
-  // BOOKMARKS (Working)
+  // BOOKMARKS
   function getBookmarks() {
     const bookmarks = localStorage.getItem('newsanywhere_bookmarks');
     return bookmarks ? JSON.parse(bookmarks) : [];
@@ -730,7 +725,7 @@
     `).join('');
   }
  
-  // LIVE SEARCH
+  // SEARCH
   function onInputChange() {
     clearTimeout(debounceTimer);
     const dot = document.getElementById('liveDot');
@@ -769,7 +764,6 @@
     onInputChange();
   }
  
-  // FETCH
   async function fetchNews(reset = false) {
     if (isFetching || !hasMore) return;
     isFetching = true;
@@ -787,7 +781,7 @@
  
     if (reset) {
       showSkeletons();
-      setStatus('');
+      setStatus('Fetching latest news...');
     } else {
       document.getElementById('load-more-trigger').innerHTML =
         `<span class="load-spinner"></span> Loading more stories…`;
@@ -797,20 +791,13 @@
       const res = await fetch(`/api/news?${params}`);
       const data = await res.json();
  
-      if (data.invalidQuery) {
+      if (data.error) {
         if (reset) {
           document.getElementById('results').innerHTML = `
-            <div class="error-box">${data.error || 'Please enter a more specific search'}</div>`;
-        }
-        document.getElementById('load-more-trigger').innerHTML = '';
-        isFetching = false;
-        return;
-      }
- 
-      if (data.rateLimited) {
-        if (reset) {
-          document.getElementById('results').innerHTML = `
-            <div class="error-box">📊 ${data.error}<br><small>Free tier: 100 requests/day. Try again tomorrow.</small></div>`;
+            <div class="empty-state">
+              <div class="big">⚠️</div>
+              <p>${data.error}</p>
+            </div>`;
         }
         document.getElementById('load-more-trigger').innerHTML = '';
         isFetching = false;
@@ -830,20 +817,15 @@
         return;
       }
  
-      const articles = data.articles.filter(a => a.title && a.title !== '[Removed]');
-      totalLoaded += articles.length;
+      totalLoaded += data.articles.length;
  
       if (reset) document.getElementById('results').innerHTML = '';
-      appendCards(articles);
+      appendCards(data.articles);
       
-      if (data.usingTopHeadlines) {
-        setStatus(`📰 Top headlines ${location ? 'from ' + location : ''} ${genre ? 'in ' + genre : ''} • ${totalLoaded} stories`);
-      } else {
-        setStatus(`${totalLoaded} results for "${currentQuery}"`);
-      }
+      setStatus(`${totalLoaded} stories for "${currentQuery}"`);
  
       hasMore = data.hasMore === true;
-      if (!hasMore || articles.length < PAGE_SIZE) {
+      if (!hasMore || data.articles.length < PAGE_SIZE) {
         document.getElementById('load-more-trigger').innerHTML =
           `<div class="end-marker">End of results</div>`;
       } else {
@@ -855,8 +837,9 @@
       console.error('Fetch error:', err);
       if (reset) {
         document.getElementById('results').innerHTML = `
-          <div class="error-box">
-            ⚠️ Could not connect to server. Please refresh and try again.
+          <div class="empty-state">
+            <div class="big">⚠️</div>
+            <p>Connection error. Please refresh and try again.</p>
           </div>`;
       }
       document.getElementById('load-more-trigger').innerHTML = '';
@@ -865,7 +848,6 @@
     isFetching = false;
   }
  
-  // SKELETON
   function showSkeletons() {
     document.getElementById('results').innerHTML = Array.from({length: 6}, () => `
       <div class="skeleton-card">
@@ -877,7 +859,6 @@
       </div>`).join('');
   }
  
-  // RENDER
   function appendCards(articles) {
     const el = document.getElementById('results');
     articles.forEach(a => {
@@ -908,7 +889,6 @@
       </div>`;
   }
  
-  // INFINITE SCROLL
   const observer = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting && !isFetching && hasMore && currentQuery) {
       fetchNews(false);
@@ -921,7 +901,6 @@
     document.getElementById('status').innerHTML = msg;
   }
   
-  // Initialize bookmarks
   renderBookmarks();
 </script>
 </body>
